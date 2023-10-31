@@ -22,7 +22,7 @@ public class Product extends BaseEntity {
 
 
     @Enumerated(EnumType.STRING)
-    private ProductSellingType sellingType;
+    private ProductSellingStatus sellingStatus;
 
     private String name;
 

@@ -13,7 +13,10 @@ import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import sample.cafekiosk.spring.domain.product.ProductType;
 import sample.cafekiosk.spring.domain.product.response.ProductResponse;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
@@ -52,6 +55,15 @@ class ProductServiceTest {
         assertThat(productResponse)
             .extracting("productNumber", "type", "sellingStatus", "name", "price")
             .contains("002", HANDMADE, SELLING, "카푸치노", 5000);
+
+        List<Product> products = productRepository.findAll();
+        assertThat(products).hasSize(2)
+            .extracting("productNumber", "type", "sellingStatus", "name", "price")
+            .containsExactlyInAnyOrder(
+                tuple("001", HANDMADE, SELLING, "아메리카노", 4000),
+                tuple("002", HANDMADE, SELLING, "카푸치노", 5000)
+            );
+
     }
 
     @DisplayName("상품이 하나도 없는 경우 신규 상품을 등록하면 상품번호는 001이다.")
@@ -72,6 +84,13 @@ class ProductServiceTest {
         assertThat(productResponse)
             .extracting("productNumber", "type", "sellingStatus", "name", "price")
             .contains("001", HANDMADE, SELLING, "카푸치노", 5000);
+
+        List<Product> products = productRepository.findAll();
+        assertThat(products).hasSize(1)
+            .extracting("productNumber", "type", "sellingStatus", "name", "price")
+            .containsExactlyInAnyOrder(
+                tuple("001", HANDMADE, SELLING, "카푸치노", 5000)
+            );
     }
 
 

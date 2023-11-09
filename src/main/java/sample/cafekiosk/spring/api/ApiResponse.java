@@ -15,11 +15,15 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    public static <T> ApiResponse<T> of(HttpStatus status, String message, T data) {
+        return new ApiResponse<>(status, message, data);
+    }
+
     public static <T> ApiResponse<T> of(HttpStatus status, T data) {
-        return new ApiResponse<>(status, status.name(), data);
+        return ApiResponse.of(status, status.name(), data);
     }
 
     public static <T> ApiResponse<T> ok(T data) {
-        return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), data);
+        return ApiResponse.of(HttpStatus.OK, data);
     }
 }

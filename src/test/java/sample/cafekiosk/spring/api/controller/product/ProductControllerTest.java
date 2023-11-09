@@ -13,7 +13,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import sample.cafekiosk.spring.api.service.product.ProductService;
+import sample.cafekiosk.spring.domain.product.response.ProductResponse;
 
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -126,8 +131,8 @@ class ProductControllerTest {
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("상품명은 필수입니다."))
             .andExpect(jsonPath("$.data").isEmpty());
-
     }
+
 
     @DisplayName("신규 상품을 등록할 때 가격은 양수이다.")
     @Test
@@ -152,5 +157,30 @@ class ProductControllerTest {
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("상품 가격은 0보다 커야합니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("판매 상품을 조회한다.")
+    @Test
+    void getSellingProducts() throws Exception {
+        //given
+        when(productService.getSellingProducts()).thenReturn(List.of(
+            ProductResponse.builder()
+                .type(HANDMADE)
+                .sellingStatus(SELLING)
+                .name("아메리카노")
+                .price(4000)
+                .build()
+        ));
+
+        //when //then
+        mockMvc.perform(
+                get("/api/v1/products/selling")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.status").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"))
+            .andExpect(jsonPath("$.data").isArray());
     }
 }

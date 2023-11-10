@@ -22,7 +22,7 @@ public class ProductController {
     @PostMapping("/api/v1/products/new")
     private ApiResponse<ProductResponse> createProduct(
         @RequestBody @Valid ProductCreateRequest request) {
-        return ApiResponse.ok(productService.createProduct(request));
+        return ApiResponse.ok(productService.createProduct(request.toServiceRequest()));
     }
 
     @GetMapping("/api/v1/products/selling")

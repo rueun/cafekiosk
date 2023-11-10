@@ -1,6 +1,5 @@
 package sample.cafekiosk.spring.api.service.order;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,7 @@ class OrderServiceTest {
 
 
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();
@@ -109,7 +108,7 @@ class OrderServiceTest {
             .build();
 
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();
@@ -156,7 +155,7 @@ class OrderServiceTest {
 
         //when //then
 
-        assertThatThrownBy(() -> orderService.createOrder(request, registeredDateTime))
+        assertThatThrownBy(() -> orderService.createOrder(request.toServiceRequest(), registeredDateTime))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("재고가 부족한 상품이 있습니다.");
 
@@ -179,7 +178,7 @@ class OrderServiceTest {
             .build();
 
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();

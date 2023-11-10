@@ -21,6 +21,6 @@ public class OrderController {
     public OrderResponse createOrder(@RequestBody OrderCreateRequest request) {
 
         LocalDateTime registeredDateTime = LocalDateTime.now();
-        return orderService.createOrder(request, registeredDateTime);
+        return orderService.createOrder(request.toServiceRequest(), registeredDateTime);
     }
 }
